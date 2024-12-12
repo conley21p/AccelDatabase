@@ -1,0 +1,12 @@
+services:
+  db:
+    container_name: accel_cnt
+    image: accel_db_img
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: accelUser
+      POSTGRES_PASSWORD: accelPass
+      POSTGRES_DB: accel_db
+    volumes:
+      - ./sql/:/docker-entrypoint-initdb.d/
