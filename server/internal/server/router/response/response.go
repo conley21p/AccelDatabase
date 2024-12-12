@@ -3,7 +3,7 @@ package response
 import (
 	"time"
 
-	"github.com/conley21p/AccelDatabase/internal/model"
+	"github.com/conley21p/AccelDatabase/server/internal/model"
 	"github.com/gofiber/fiber/v2"
 )
 

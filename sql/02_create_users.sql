@@ -7,6 +7,6 @@ create table users(
 );
 
 create trigger users_updated_at
-  before update on users
+  before update on user
   for each row
   execute procedure moddatetime (updated_at);

@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/conley21p/AccelDatabase/internal/server/router/response"
+	"github.com/conley21p/AccelDatabase/server/internal/server/router/response"
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
 )

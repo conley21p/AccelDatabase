@@ -1,11 +1,11 @@
 package server
 
 import (
-	"github.com/conley21p/AccelDatabase/internal/config"
-	"github.com/conley21p/AccelDatabase/internal/controller"
-	"github.com/conley21p/AccelDatabase/internal/database"
-	"github.com/conley21p/AccelDatabase/internal/server/router/response"
-	"github.com/conley21p/AccelDatabase/internal/service"
+	"github.com/conley21p/AccelDatabase/server/internal/config"
+	"github.com/conley21p/AccelDatabase/server/internal/controller"
+	"github.com/conley21p/AccelDatabase/server/internal/database"
+	"github.com/conley21p/AccelDatabase/server/internal/server/router/response"
+	"github.com/conley21p/AccelDatabase/server/internal/service"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/jmoiron/sqlx"

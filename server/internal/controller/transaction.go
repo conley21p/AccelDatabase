@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"github.com/conley21p/AccelDatabase/internal/model"
-	"github.com/conley21p/AccelDatabase/internal/server/router/response"
-	"github.com/conley21p/AccelDatabase/internal/service"
+	"github.com/conley21p/AccelDatabase/server/internal/model"
+	"github.com/conley21p/AccelDatabase/server/internal/server/router/response"
+	"github.com/conley21p/AccelDatabase/server/internal/service"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 )

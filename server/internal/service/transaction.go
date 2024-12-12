@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/conley21p/AccelDatabase/internal/model"
+	"github.com/conley21p/AccelDatabase/server/internal/model"
 	"github.com/jmoiron/sqlx"
 )
 

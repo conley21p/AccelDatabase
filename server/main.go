@@ -8,8 +8,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/conley21p/AccelDatabase/internal/config"
-	"github.com/conley21p/AccelDatabase/internal/server"
+	"github.com/conley21p/AccelDatabase/server/internal/config"
+	"github.com/conley21p/AccelDatabase/server/internal/server"
 )
 
 func main() {
