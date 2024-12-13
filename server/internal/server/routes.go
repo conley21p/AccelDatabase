@@ -3,9 +3,9 @@ package server
 import (
 	"errors"
 
-	"github.com/conley21p/AccelDatabase/server/internal/controller"
-	"github.com/conley21p/AccelDatabase/server/internal/server/router/middleware"
-	"github.com/conley21p/AccelDatabase/server/internal/server/router/response"
+	"github.com/conley21p/AccelDatabase/Server/internal/controller"
+	"github.com/conley21p/AccelDatabase/Server/internal/server/router/middleware"
+	"github.com/conley21p/AccelDatabase/Server/internal/server/router/response"
 	"github.com/gofiber/fiber/v2"
 	"github.com/jmoiron/sqlx"
 )

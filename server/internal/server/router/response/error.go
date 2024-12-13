@@ -3,7 +3,7 @@ package response
 import (
 	"log"
 
-	"github.com/conley21p/AccelDatabase/server/internal/model"
+	"github.com/conley21p/AccelDatabase/Server/internal/model"
 	"github.com/gofiber/fiber/v2"
 )
 

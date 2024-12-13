@@ -3,10 +3,10 @@ package main
 import (
 	"log"
 
-	"github.com/conley21p/AccelDatabase/server/internal/config"
-	"github.com/conley21p/AccelDatabase/server/internal/database"
-	"github.com/conley21p/AccelDatabase/server/internal/model"
-	"github.com/conley21p/AccelDatabase/server/pkg/util"
+	"github.com/conley21p/AccelDatabase/Server/internal/config"
+	"github.com/conley21p/AccelDatabase/Server/internal/database"
+	"github.com/conley21p/AccelDatabase/Server/internal/model"
+	"github.com/conley21p/AccelDatabase/Server/pkg/util"
 )
 
 func main() {

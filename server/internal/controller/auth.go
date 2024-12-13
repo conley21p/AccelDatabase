@@ -3,10 +3,10 @@ package controller
 import (
 	"time"
 
-	"github.com/conley21p/AccelDatabase/server/internal/model"
-	"github.com/conley21p/AccelDatabase/server/internal/server/router/response"
-	"github.com/conley21p/AccelDatabase/server/internal/service"
-	"github.com/conley21p/AccelDatabase/server/pkg/util"
+	"github.com/conley21p/AccelDatabase/Server/internal/model"
+	"github.com/conley21p/AccelDatabase/Server/internal/server/router/response"
+	"github.com/conley21p/AccelDatabase/Server/internal/service"
+	"github.com/conley21p/AccelDatabase/Server/pkg/util"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 )
