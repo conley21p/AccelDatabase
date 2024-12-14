@@ -1,0 +1,5 @@
+
+
+ALTER TABLE users ADD COLUMN driver_id VARCHAR(36) REFERENCES drivers(id);
+
+ALTER TABLE users ADD COLUMN buyer_id VARCHAR(36) REFERENCES buyers(id);

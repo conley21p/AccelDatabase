@@ -11,26 +11,29 @@ type DriverController struct {
 	s *service.DriverService
 }
 
-func NewAccountontroller(s *service.DriverService) *DriverController {
+func NewDriverController(s *service.DriverService) *DriverController {
 	return &DriverController{
 		s: s,
 	}
 }
 
 func (c *DriverController) Get(ctx *fiber.Ctx) error {
+	//Authenticate request
 	user := ctx.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	userId := claims["sub"].(string)
+
+	// Get Driver ID from request
 	id := ctx.Params("id")
-	category, err := c.s.GetById(id)
+	driver, err := c.s.GetById(id)
 	if err != nil {
 		return response.ErrorNotFound(err)
 	}
-	if category.UserId != userId {
+	if driver.UserId != userId {
 		return response.ErrorUnauthorized(nil, "unauthorized")
 	}
 	return response.Ok(ctx, fiber.Map{
-		"category": category,
+		"driver": driver,
 	})
 }
 

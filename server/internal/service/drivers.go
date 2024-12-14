@@ -1,8 +1,6 @@
 package service
 
 import (
-	"time"
-
 	"github.com/conley21p/AccelDatabase/Server/internal/model"
 	"github.com/jmoiron/sqlx"
 )
@@ -30,27 +28,20 @@ func (s *DriverService) GetByUserId(userId string) (model.Driver, error) {
 }
 
 func (s *DriverService) Create(driver model.Driver) (*model.Driver, error) {
-	// Load the CST location
-	loc, err := time.LoadLocation("America/Chicago")
-	if err != nil {
-		return nil, err
-	}
-
 	rows, err := s.db.Queryx(
 		`insert into drivers (
-			UserId            
-			FirstName         
-			LastName          
-			PhoneNumber       
-			PolicyNumber      
-			InsProvider       
-			PolicyStartDate   
-			PolicyEndDate     
-			LicenseNumber
-			LicenseExpireDate 
-			CreatedAt         
+        user_id,
+        first_name,
+        last_name,
+        phone_number,
+        policy_number,
+        ins_provider,
+        policy_start_date,
+        policy_end_date,
+        license_number,
+        license_expire_date      
 			)
-	 	 values ($1, $2, $3, $4, $5, $6, $7)
+	 	 values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 	 	 returning *`,
 		driver.UserId,
 		driver.FirstName,
@@ -62,7 +53,6 @@ func (s *DriverService) Create(driver model.Driver) (*model.Driver, error) {
 		driver.PolicyEndDate,
 		driver.LicenseNumber,
 		driver.LicenseExpireDate,
-		time.Now().In(loc).Format("2006-01-02 15:04:05 CST"),
 	)
 	if err != nil {
 		return nil, err

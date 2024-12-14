@@ -40,12 +40,14 @@ func (s *Server) Start() error {
 	us := service.NewUserService(s.db)
 	// cs := service.NewCategoryService(s.db)
 	ts := service.NewTransactionService(s.db)
+	ds := service.NewDriverService(s.db)
 
 	uc := controller.NewAuthController(us, s.jwtSecret)
 	// cc := controller.NewCategoryController(cs)
 	tc := controller.NewTransactionController(ts)
+	dc := controller.NewDriverController(ds)
 
-	s.SetupRoutes(uc, tc)
+	s.SetupRoutes(uc, tc, dc)
 	return s.app.Listen(s.port)
 }
 
