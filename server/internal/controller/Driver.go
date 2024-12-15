@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/conley21p/AccelDatabase/Server/internal/model"
 	"github.com/conley21p/AccelDatabase/Server/internal/server/router/response"
 	"github.com/conley21p/AccelDatabase/Server/internal/service"
 	"github.com/gofiber/fiber/v2"
@@ -23,9 +24,7 @@ func (c *DriverController) Get(ctx *fiber.Ctx) error {
 	claims := user.Claims.(jwt.MapClaims)
 	userId := claims["sub"].(string)
 
-	// Get Driver ID from request
-	id := ctx.Params("id")
-	driver, err := c.s.GetById(id)
+	driver, err := c.s.GetByUserId(userId)
 	if err != nil {
 		return response.ErrorNotFound(err)
 	}
@@ -37,22 +36,27 @@ func (c *DriverController) Get(ctx *fiber.Ctx) error {
 	})
 }
 
-// func (c *DriverController) Create(ctx *fiber.Ctx) error {
-// 	user := ctx.Locals("user").(*jwt.Token)
-// 	claims := user.Claims.(jwt.MapClaims)
-// 	userId := claims["sub"].(string)
-// 	input := model.CategoryInput{}
-// 	if err := ctx.BodyParser(&input); err != nil {
-// 		return response.ErrorBadRequest(err)
-// 	}
-// 	category, err := c.s.Create(userId, input.Title)
-// 	if err != nil {
-// 		return response.ErrorBadRequest(err)
-// 	}
-// 	return response.Created(ctx, fiber.Map{
-// 		"category": category,
-// 	})
-// }
+func (c *DriverController) Create(ctx *fiber.Ctx) error {
+	user := ctx.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userId := claims["sub"].(string)
+	println()
+	if userId == "" {
+		return response.ErrorUnauthorized(nil, "Unauthorized")
+	}
+	input := model.DriverInput{}
+	if err := ctx.BodyParser(&input); err != nil {
+		return response.ErrorBadRequest(err)
+	}
+
+	driver, err := c.s.Create(userId, input)
+	if err != nil {
+		return response.ErrorBadRequest(err)
+	}
+	return response.Created(ctx, fiber.Map{
+		"driver": driver,
+	})
+}
 
 // func (c *DriverController) Update(ctx *fiber.Ctx) error {
 // 	user := ctx.Locals("user").(*jwt.Token)

@@ -8,18 +8,16 @@ type AuthInput struct {
 }
 
 type DriverInput struct {
-	UserId            string     `json:"userId"`
-	FirstName         string     `json:"firstName"`
-	LastName          string     `json:"lastName"`
-	PhoneNumber       string     `json:"phoneNumber"`
-	PolicyNumber      string     `json:"policyNumber"`
-	InsProvider       string     `json:"insProvider"`
-	PolicyStartDate   time.Time  `db:"policy_start_date" json:"policyStartDate"`
-	PolicyEndDate     time.Time  `db:"policy_end_date" json:"policyEndDate"`
-	LicenseNumber     string     `json:"licenseNumber"`
-	LicenseExpireDate time.Time  `db:"license_expire_date" json:"licenseExpireDate"`
-	CreatedAt         time.Time  `db:"created_at" json:"createdAt"`
-	UpdatedAt         *time.Time `db:"updated_at" json:"updatedAt"`
+	FirstName         string    `json:"firstName"`
+	LastName          string    `json:"lastName"`
+	PhoneNumber       string    `json:"phoneNumber"`
+	PolicyNumber      string    `json:"policyNumber"`
+	InsProvider       string    `json:"insProvider"`
+	PolicyStartDate   time.Time `db:"policy_start_date" json:"policyStartDate"`
+	PolicyEndDate     time.Time `db:"policy_end_date" json:"policyEndDate"`
+	LicenseNumber     string    `json:"licenseNumber"`
+	LicenseExpireDate time.Time `db:"license_expire_date" json:"licenseExpireDate"`
+	Description       string    `json:"description"`
 }
 
 // Demo test data

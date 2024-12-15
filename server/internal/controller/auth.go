@@ -62,13 +62,14 @@ func (c *AuthController) Login(ctx *fiber.Ctx) error {
 	if err := ctx.BodyParser(&input); err != nil {
 		return response.ErrorBadRequest(err)
 	}
-	user, err := c.s.GetByUsername(input.Username)
+	user, err := c.s.GetIDByUsername(input.Username)
 	if err != nil {
 		return response.ErrorUnauthorized(err, "Login error")
 	}
 	if !util.CheckPassword(input.Password, user.Password) {
 		return response.ErrorUnauthorized(err, "Login error")
 	}
+	println("Create token ID: " + user.Id)
 	token, err := c.createToken(user.Id)
 	if err != nil {
 		return response.ErrorUnauthorized(err, "Login error")
@@ -83,7 +84,8 @@ func (c *AuthController) Me(ctx *fiber.Ctx) error {
 	user := ctx.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	id := claims["sub"].(string)
-	currentUser, err := c.s.GetByUsername(id)
+	println("id" + id)
+	currentUser, err := c.s.GetById(id)
 	if err != nil {
 		return response.ErrorUnauthorized(err, "Invalid credentials")
 	}

@@ -27,7 +27,7 @@ func (s *DriverService) GetByUserId(userId string) (model.Driver, error) {
 	return driver, err
 }
 
-func (s *DriverService) Create(driver model.Driver) (*model.Driver, error) {
+func (s *DriverService) Create(userId string, driver model.DriverInput) (*model.Driver, error) {
 	rows, err := s.db.Queryx(
 		`insert into drivers (
         user_id,
@@ -43,7 +43,7 @@ func (s *DriverService) Create(driver model.Driver) (*model.Driver, error) {
 			)
 	 	 values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 	 	 returning *`,
-		driver.UserId,
+		userId,
 		driver.FirstName,
 		driver.LastName,
 		driver.PhoneNumber,

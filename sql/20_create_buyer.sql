@@ -5,7 +5,7 @@ CREATE TABLE buyers (
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
-    transactionId VARCHAR(255),
+    -- transactionId VARCHAR(255),
     priorDeliveries BIGINT,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE

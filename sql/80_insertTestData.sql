@@ -1,37 +1,37 @@
-INSERT INTO users ( username, password)
-VALUES
-('driver2',                                --username
- 'password'                               --password
-),
-(
-  'jane_smith2',
-  'securepass'
-);
+-- INSERT INTO users ( username, password)
+-- VALUES
+-- ('driver2',                                --username
+--  'password'                               --password
+-- ),
+-- (
+--   'jane_smith2',
+--   'securepass'
+-- );
 
-INSERT INTO drivers (
-        user_id,
-        first_name,
-        last_name,
-        phone_number,
-        policy_number,
-        ins_provider,
-        policy_start_date,
-        policy_end_date,
-        license_number,
-        license_expire_date
-    )
-    VALUES (
-        (SELECT id FROM users WHERE username = 'driver2'),
-        'Conley',                               -- first_name
-        'Price',                                -- last_name
-        '+1234567890',                          -- phone_number
-        'POL123456',                            -- policy_number
-        'ACME Insurance',                       -- ins_provider
-        '2024-01-01 00:00:00+00',               -- policy_start_date (UTC)
-        '2025-01-01 00:00:00+00',               -- policy_end_date (UTC)
-        'LIC67890',                             -- license_number
-        '2026-01-01 00:00:00+00'                -- license_expire_date (UTC)
-    )
+-- INSERT INTO drivers (
+--         user_id,
+--         first_name,
+--         last_name,
+--         phone_number,
+--         policy_number,
+--         ins_provider,
+--         policy_start_date,
+--         policy_end_date,
+--         license_number,
+--         license_expire_date
+--     )
+--     VALUES (
+--         (SELECT id FROM users WHERE username = 'driver2'),
+--         'Conley',                               -- first_name
+--         'Price',                                -- last_name
+--         '+1234567890',                          -- phone_number
+--         'POL123456',                            -- policy_number
+--         'ACME Insurance',                       -- ins_provider
+--         '2024-01-01 00:00:00+00',               -- policy_start_date (UTC)
+--         '2025-01-01 00:00:00+00',               -- policy_end_date (UTC)
+--         'LIC67890',                             -- license_number
+--         '2026-01-01 00:00:00+00'                -- license_expire_date (UTC)
+--     )
 
 -- Insert the new driver and return the id
 -- WITH inserted_driver AS (

@@ -25,7 +25,6 @@ func healthCheck(db *sqlx.DB) fiber.Handler {
 
 func (s *Server) SetupRoutes(
 	uc *controller.AuthController,
-	// cc *controller.CategoryController,
 	tc *controller.TransactionController,
 	dc *controller.DriverController,
 ) {
@@ -35,16 +34,17 @@ func (s *Server) SetupRoutes(
 
 	api.Post("/login", uc.Login)
 	api.Post("/register", uc.Register)
-	api.Get("/me", middleware.Authenticate(s.jwtSecret), uc.Me)
+	// api.Get("/me", middleware.Authenticate(s.jwtSecret), uc.Me)
 
-	drivers := api.Group("/Driver")
+	drivers := api.Group("/driver")
 	drivers.Use(middleware.Authenticate(s.jwtSecret))
+	drivers.Get("/", dc.Get)
+	drivers.Post("/register", dc.Create)
 	// categories.Get("/", cc.List)
 	// categories.Post("/", cc.Create)
 	// categories.Get("/:id", cc.Get)
 	// categories.Put("/:id", cc.Update)
 	// categories.Delete("/:id", cc.Delete)
-	drivers.Get("/", dc.Get)
 	//categories.Get("/",)
 
 	// transactions := api.Group("/transaction")
