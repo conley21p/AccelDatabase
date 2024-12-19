@@ -38,16 +38,17 @@ func NewServer(cfg *config.Config) *Server {
 
 func (s *Server) Start() error {
 	us := service.NewUserService(s.db)
-	// cs := service.NewCategoryService(s.db)
-	ts := service.NewTransactionService(s.db)
 	ds := service.NewDriverService(s.db)
+	contactService := service.NewContactInfoService(s.db)
 
 	uc := controller.NewAuthController(us, s.jwtSecret)
-	// cc := controller.NewCategoryController(cs)
-	tc := controller.NewTransactionController(ts)
 	dc := controller.NewDriverController(ds)
+	contactController := controller.NewContactInfoController(contactService)
 
-	s.SetupRoutes(uc, tc, dc)
+	s.SetupRoutes(uc,
+		dc,
+		contactController)
+
 	return s.app.Listen(s.port)
 }
 

@@ -24,34 +24,40 @@ func healthCheck(db *sqlx.DB) fiber.Handler {
 }
 
 func (s *Server) SetupRoutes(
-	uc *controller.AuthController,
-	tc *controller.TransactionController,
-	dc *controller.DriverController,
+	usrController *controller.AuthController,
+	drvController *controller.DriverController,
+	contactController *controller.ContactInfoController,
 ) {
 	api := s.app.Group("/api")
 
+	// ********************************************
+	// 		Login Request
+	// ********************************************
 	api.Get("/", healthCheck(s.db))
+	api.Post("/login", usrController.Login)
+	api.Post("/register", usrController.Register)
 
-	api.Post("/login", uc.Login)
-	api.Post("/register", uc.Register)
-	// api.Get("/me", middleware.Authenticate(s.jwtSecret), uc.Me)
-
+	// ********************************************
+	// 		Driver Request
+	// ********************************************
 	drivers := api.Group("/driver")
 	drivers.Use(middleware.Authenticate(s.jwtSecret))
-	drivers.Get("/", dc.Get)
-	drivers.Post("/register", dc.Create)
-	// categories.Get("/", cc.List)
-	// categories.Post("/", cc.Create)
-	// categories.Get("/:id", cc.Get)
-	// categories.Put("/:id", cc.Update)
-	// categories.Delete("/:id", cc.Delete)
-	//categories.Get("/",)
+	drivers.Get("/", drvController.Get)
+	drivers.Post("/register", drvController.Create)
+	drivers.Post("/ContactInfo", contactController.Create)
+	// drivers.Post("/Hauler", dc.CreateHauler)
+	// drivers.Post("/Trailer", dc.CreateTrailer)
+	// drivers.Post("/Insurance", dc.CreateInsurance)
+	// drivers.Post("/License", dc.CreateLicense)
 
-	// transactions := api.Group("/transaction")
-	// transactions.Use(middleware.Authenticate(s.jwtSecret))
-	// transactions.Get("/", tc.GetAll)
-	// transactions.Post("/", tc.Create)
-	// transactions.Get("/:id", tc.Get)
-	// transactions.Put("/:id", tc.Update)
-	// transactions.Delete("/:id", tc.Delete)
+	// Transportation Request
+
+	// ********************************************
+	// 		Buyer Request
+	// ********************************************
+	buyers := api.Group("/buyer")
+	buyers.Use(middleware.Authenticate(s.jwtSecret))
+
+	// Transportation Request
+
 }

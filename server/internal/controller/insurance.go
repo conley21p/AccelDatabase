@@ -8,35 +8,32 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-type DriverController struct {
-	s *service.DriverService
+type InsuranceController struct {
+	s *service.InsuranceService
 }
 
-func NewDriverController(s *service.DriverService) *DriverController {
-	return &DriverController{
+func NewInsuranceController(s *service.InsuranceService) *InsuranceController {
+	return &InsuranceController{
 		s: s,
 	}
 }
 
-func (c *DriverController) Get(ctx *fiber.Ctx) error {
+func (c *InsuranceController) Get(ctx *fiber.Ctx, driverId string) error {
 	//Authenticate request
 	user := ctx.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	userId := claims["sub"].(string)
 
-	driver, err := c.s.GetByUserId(userId)
+	insurance, err := c.s.GetByDriverId(driverId, userId)
 	if err != nil {
 		return response.ErrorNotFound(err)
 	}
-	if driver.UserId != userId {
-		return response.ErrorUnauthorized(nil, "unauthorized")
-	}
 	return response.Ok(ctx, fiber.Map{
-		"driver": driver,
+		"insurance": insurance,
 	})
 }
 
-func (c *DriverController) Create(ctx *fiber.Ctx) error {
+func (c *InsuranceController) Create(ctx *fiber.Ctx) error {
 	user := ctx.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	userId := claims["sub"].(string)
@@ -44,21 +41,21 @@ func (c *DriverController) Create(ctx *fiber.Ctx) error {
 	if userId == "" {
 		return response.ErrorUnauthorized(nil, "Unauthorized")
 	}
-	input := model.DriverInput{}
+	input := model.InsuranceInput{}
 	if err := ctx.BodyParser(&input); err != nil {
 		return response.ErrorBadRequest(err)
 	}
 
-	driver, err := c.s.Create(userId, input)
+	insurance, err := c.s.Create(userId, input)
 	if err != nil {
 		return response.ErrorBadRequest(err)
 	}
 	return response.Created(ctx, fiber.Map{
-		"driver": driver,
+		"insurance": insurance,
 	})
 }
 
-// func (c *DriverController) Update(ctx *fiber.Ctx) error {
+// func (c *InsuranceController) Update(ctx *fiber.Ctx) error {
 // 	user := ctx.Locals("user").(*jwt.Token)
 // 	claims := user.Claims.(jwt.MapClaims)
 // 	userId := claims["sub"].(string)
@@ -76,7 +73,7 @@ func (c *DriverController) Create(ctx *fiber.Ctx) error {
 // 	})
 // }
 
-// func (c *DriverController) Delete(ctx *fiber.Ctx) error {
+// func (c *InsuranceController) Delete(ctx *fiber.Ctx) error {
 // 	user := ctx.Locals("user").(*jwt.Token)
 // 	claims := user.Claims.(jwt.MapClaims)
 // 	userId := claims["sub"].(string)
