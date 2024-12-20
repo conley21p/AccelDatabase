@@ -19,11 +19,12 @@ func NewDriverService(db *sqlx.DB) *DriverService {
 }
 func (s *DriverService) GetByUserId(userId string) (*model.Driver, error) {
 	driver := model.Driver{}
-	err := s.db.Get(&driver, "select * from drivers where user_id = $1", userId)
+	err := s.db.Get(&driver, "select id, user_id, first_name, last_name, created_at, updated_at from drivers where user_id = $1", userId)
 	if err != nil {
 		return nil, err
 	}
 
+	println("FetchDriverAttributes")
 	driver, err = s.fetchDriverAttributes(driver)
 	if err != nil {
 		return nil, err
@@ -34,7 +35,7 @@ func (s *DriverService) GetByUserId(userId string) (*model.Driver, error) {
 func (s *DriverService) GetById(id string) (*model.Driver, error) {
 	driver := model.Driver{}
 	println("Select on drivers")
-	err := s.db.Get(&driver, "select * from drivers where id = $1", id)
+	err := s.db.Get(&driver, "select id, user_id, first_name, last_name, created_at, updated_at from drivers where id = $1", id)
 	if err != nil {
 		return nil, err
 	}
@@ -329,15 +330,14 @@ func (s *DriverService) createLicense(tx *sqlx.Tx, driverId string, license *mod
 	return nil, nil
 }
 
-func (s *DriverService) updateDriverReferences(tx *sqlx.Tx, driverId string, insuranceId, licenseId *string) error {
-	if insuranceId != nil || licenseId != nil {
-		println("insuranceId: " + *insuranceId)
-		println("licenseId: " + *licenseId)
-		println("driverId: " + driverId)
+func (s *DriverService) updateDriverReferences(tx *sqlx.Tx, driverId string,
+	contactInfoId, insuranceId, licenseId *string) error {
+	if contactInfoId != nil || insuranceId != nil || licenseId != nil {
 		_, err := tx.Exec(
 			`UPDATE drivers 
-			SET insurance_id = $1, license_id = $2
-			WHERE id = $3`,
+			SET contact_info_id = $1, insurance_id = $2, license_id = $3
+			WHERE id = $4`,
+			contactInfoId,
 			insuranceId,
 			licenseId,
 			driverId,
@@ -365,10 +365,19 @@ func (s *DriverService) CreateWithDetails(userId string, input model.DriverRegis
 	defer tx.Rollback()
 
 	println("CreateDriver")
-	// Create driver
 	driverId, err := s.createDriver(tx, userId, input.Driver)
 	if err != nil {
 		return nil, err
+	}
+
+	println("CreateContactInfo")
+	// Create contact info if provided
+	var contactInfoId *string
+	if input.ContactInfo != nil {
+		contactInfoId, err = s.createContactInfo(tx, driverId, input.ContactInfo)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	println("CreateInsurance")
@@ -387,18 +396,16 @@ func (s *DriverService) CreateWithDetails(userId string, input model.DriverRegis
 
 	println("UpdateDriverReferences")
 	// Update driver with references
-	if err := s.updateDriverReferences(tx, driverId, insuranceId, licenseId); err != nil {
+	if err := s.updateDriverReferences(tx, driverId, contactInfoId, insuranceId, licenseId); err != nil {
 		return nil, err
 	}
 
 	println("Commit")
-	// Commit the transaction
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
 
 	println("GetById")
-	// Fetch the complete driver record
 	return s.GetById(driverId)
 }
 
@@ -469,4 +476,44 @@ func (s *DriverService) GetWithDetails(driverId string) (*model.Driver, error) {
 	}
 
 	return &driver, nil
+}
+
+func (s *DriverService) createContactInfo(tx *sqlx.Tx, driverId string, contactInfo *model.ContactInfoInput) (*string, error) {
+	if contactInfo == nil {
+		return nil, nil
+	}
+
+	rows, err := tx.Queryx(
+		`INSERT INTO contact_info (
+			driver_id,
+			phone_number,
+			street_address,
+			city,
+			state,
+			zip_code,
+			country,
+			created_at
+		) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
+		RETURNING id`,
+		driverId,
+		contactInfo.PhoneNumber,
+		contactInfo.StreetAddress,
+		contactInfo.City,
+		contactInfo.State,
+		contactInfo.ZipCode,
+		contactInfo.Country,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var id string
+	if rows.Next() {
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		return &id, nil
+	}
+	return nil, nil
 }

@@ -37,9 +37,14 @@ func (c *AuthController) createToken(id string) (string, error) {
 }
 
 func (c *AuthController) Register(ctx *fiber.Ctx) error {
-	input := model.AuthInput{}
+	input := model.AuthRegInput{}
 	if err := ctx.BodyParser(&input); err != nil {
 		return response.ErrorBadRequest(err)
+	}
+
+	// Validate required fields
+	if input.Email == "" {
+		return response.ErrorBadRequest(errors.New("email is required"))
 	}
 
 	// Check if username already exists
@@ -51,22 +56,21 @@ func (c *AuthController) Register(ctx *fiber.Ctx) error {
 		return response.ErrorBadRequest(errors.New("username already exists"))
 	}
 
-	println("Password: " + input.Password)
 	password, err := util.HashPassword(input.Password)
 	if err != nil {
 		return response.ErrorBadRequest(err)
 	}
-	println("input.username: " + input.Username)
-	println("input.password: " + input.Password)
-	println("password: " + password)
-	user, err := c.s.Create(input.Username, password)
+
+	user, err := c.s.Create(input.Username, input.Email, password)
 	if err != nil {
 		return response.ErrorUnauthorized(err, "Registration error")
 	}
+
 	token, err := c.createToken(user.Id)
 	if err != nil {
 		return response.ErrorUnauthorized(err, "Registration error")
 	}
+
 	return response.Created(ctx, fiber.Map{
 		"user":  user,
 		"token": token,

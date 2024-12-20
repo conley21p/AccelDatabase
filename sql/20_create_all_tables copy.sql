@@ -3,7 +3,7 @@ CREATE TABLE users (
     id text not null primary key default nanoid(),
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) UNIQUE,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE
 );
@@ -54,7 +54,6 @@ CREATE TABLE license (
 -- Hauler table
 CREATE TABLE haulers (
     id text not null primary key default nanoid(),
-    driver_id text not null REFERENCES drivers(id),
     make VARCHAR(50),
     model VARCHAR(50),
     year INTEGER,
@@ -136,18 +135,6 @@ CREATE TABLE transactions (
     updated_at TIMESTAMP WITH TIME ZONE
 );
 
--- Vehicle table
-CREATE TABLE vehicles (
-    id text not null primary key default nanoid(),
-    length INTEGER,
-    width INTEGER,
-    height INTEGER,
-    auto_id text REFERENCES autos(id),
-    boat_id text REFERENCES boats(id),
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE
-);
-
 -- Auto table
 CREATE TABLE autos (
     id text not null primary key default nanoid(),
@@ -165,6 +152,16 @@ CREATE TABLE boats (
     model VARCHAR(50),
     year INTEGER,
     with_trailer BOOLEAN,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE
+);
+
+-- Vehicle table
+CREATE TABLE vehicles (
+    id text not null primary key default nanoid(),
+    length INTEGER,
+    width INTEGER,
+    height INTEGER,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE
 );

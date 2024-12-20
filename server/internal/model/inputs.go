@@ -7,6 +7,13 @@ type AuthInput struct {
 	Password string `json:"password"`
 }
 
+// New struct for registration
+type AuthRegInput struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 // User and LoginInput structs
 type LoginInput struct {
 	Id        string     `json:"id"`
@@ -232,7 +239,8 @@ type MessageInput struct {
 
 // Add this new struct to inputs.go
 type DriverRegistrationInput struct {
-	Driver    DriverInput     `json:"driver"`
-	Insurance *InsuranceInput `json:"insurance,omitempty"`
-	License   *LicenseInput   `json:"license,omitempty"`
+	Driver      DriverInput       `json:"driver"`
+	ContactInfo *ContactInfoInput `json:"contactInfo,omitempty"`
+	Insurance   *InsuranceInput   `json:"insurance,omitempty"`
+	License     *LicenseInput     `json:"license,omitempty"`
 }

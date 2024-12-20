@@ -6,6 +6,7 @@
   "item": [
     {
       "name": "Auth",
+      "description": "Authentication endpoints for user registration and login",
       "item": [
         {
           "name": "Login",
@@ -40,7 +41,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"testpass\"\n}",
+              "raw": "{\n    \"username\": \"testuser\",\n    \"email\": \"testuser@example.com\",\n    \"password\": \"testpass\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -53,6 +54,7 @@
     },
     {
       "name": "Driver",
+      "description": "Driver-related endpoints for managing a single driver profile with associated licenses, haulers, and trailers. Each user can only have one driver account.",
       "item": [
         {
           "name": "Register Driver with Details",
@@ -72,7 +74,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"driver\": {\n        \"firstName\": \"John\",\n        \"lastName\": \"Doe\"\n    },\n    \"insurance\": {\n        \"policyNumber\": \"POL123\",\n        \"insProvider\": \"InsureCo\",\n        \"policyStartDate\": \"2024-03-20\",\n        \"policyEndDate\": \"2025-03-20\"\n    },\n    \"license\": {\n        \"licenseNumber\": \"LIC456\",\n        \"licenseExpireDate\": \"2026-03-20T00:00:00Z\"\n    }\n}",
+              "raw": "{\n    \"driver\": {\n        \"firstName\": \"John\",\n        \"lastName\": \"Doe\"\n    },\n    \"contactInfo\": {\n        \"phoneNumber\": \"123-456-7890\",\n        \"streetAddress\": \"123 Main St\",\n        \"city\": \"Anytown\",\n        \"state\": \"ST\",\n        \"zipCode\": \"12345\",\n        \"country\": \"USA\"\n    },\n    \"insurance\": {\n        \"policyNumber\": \"POL123\",\n        \"insProvider\": \"InsureCo\",\n        \"policyStartDate\": \"2024-03-20\",\n        \"policyEndDate\": \"2025-03-20\"\n    },\n    \"license\": {\n        \"licenseNumber\": \"LIC456\",\n        \"licenseExpireDate\": \"2026-03-20T00:00:00Z\"\n    }\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -97,24 +99,6 @@
               "raw": "{{baseUrl}}/api/driver",
               "host": ["{{baseUrl}}"],
               "path": ["api", "driver"]
-            }
-          }
-        },
-        {
-          "name": "Get Driver List",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/driver/list",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "driver", "list"]
             }
           }
         },
@@ -247,6 +231,7 @@
         },
         {
           "name": "License",
+          "description": "Manage driver's license information",
           "item": [
             {
               "name": "Get License",
@@ -262,15 +247,9 @@
                 "url": {
                   "raw": "{{baseUrl}}/api/driver/license/:id",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "driver", "license", ":id"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": ""
-                    }
-                  ]
+                  "path": ["api", "driver", "license", ":id"]
                 },
-                "description": "Get license details for a driver"
+                "description": "Get driver's license details"
               }
             },
             {
@@ -315,13 +294,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/api/driver/license/:id",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "driver", "license", ":id"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": ""
-                    }
-                  ]
+                  "path": ["api", "driver", "license", ":id"]
                 },
                 "body": {
                   "mode": "raw",
@@ -349,13 +322,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/api/driver/license/:id",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "driver", "license", ":id"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": ""
-                    }
-                  ]
+                  "path": ["api", "driver", "license", ":id"]
                 },
                 "description": "Delete a license"
               }
@@ -483,6 +450,7 @@
     },
     {
       "name": "Contact Info",
+      "description": "Endpoints for managing contact information for drivers and owners",
       "item": [
         {
           "name": "Get Contact Info",
@@ -596,6 +564,7 @@
     },
     {
       "name": "Owner",
+      "description": "Owner-related endpoints for managing vehicle owner profiles and their transportation requests",
       "item": [
         {
           "name": "Get Current Owner",
@@ -706,213 +675,173 @@
       ]
     },
     {
-      "name": "Vehicle",
-      "item": [
-        {
-          "name": "Get Vehicle",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/vehicle/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "vehicle", ":id"],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": ""
-                }
-              ]
-            }
-          }
-        },
-        {
-          "name": "Create Vehicle",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/vehicle",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "vehicle"]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"length\": 20,\n    \"width\": 8,\n    \"height\": 10,\n    \"transportationId\": \"trans123\",\n    \"autoId\": \"auto123\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Auto",
-      "item": [
-        {
-          "name": "Get Auto",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/auto/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auto", ":id"]
-            }
-          }
-        },
-        {
-          "name": "Create Auto",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/auto",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auto"]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"make\": \"Toyota\",\n    \"model\": \"Camry\",\n    \"year\": 2023\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Boat",
-      "item": [
-        {
-          "name": "Get Boat",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/boat/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "boat", ":id"]
-            }
-          }
-        },
-        {
-          "name": "Create Boat",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/boat",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "boat"]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"make\": \"Sea Ray\",\n    \"model\": \"Sundancer\",\n    \"year\": 2023,\n    \"withTrailer\": true\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          }
-        }
-      ]
-    },
-    {
       "name": "Transportation",
+      "description": "Endpoints for managing transportation requests, routes, and delivery details",
       "item": [
         {
-          "name": "Get Transportation",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
+          "name": "Vehicle",
+          "description": "Endpoints for managing vehicles, including dimensions and references to autos or boats",
+          "item": [
+            {
+              "name": "Get Vehicle",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/vehicle/:id",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "vehicle", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
               }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/transportation/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "transportation", ":id"]
-            }
-          }
-        },
-        {
-          "name": "Create Transportation",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/transportation",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "transportation"]
             },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"description\": \"Vehicle transport\",\n    \"transportDate\": \"2024-04-01\",\n    \"pickupAddress\": \"123 Start St\",\n    \"deliveryAddress\": \"456 End Ave\",\n    \"deliverByDate\": \"2024-04-03\",\n    \"pickupByDate\": \"2024-04-01\",\n    \"pickupAvailableDate\": \"2024-03-31\",\n    \"requestPrice\": 1500.00,\n    \"vehicleId\": \"vehicle123\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+            {
+              "name": "Create Vehicle",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/vehicle",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "vehicle"]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"length\": 20,\n    \"width\": 8,\n    \"height\": 10,\n    \"transportationId\": \"trans123\",\n    \"autoId\": \"auto123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
                 }
               }
             }
-          }
+          ]
+        },
+        {
+          "name": "Auto",
+          "description": "Endpoints for managing automobile-specific vehicle information",
+          "item": [
+            {
+              "name": "Get Auto",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/auto/:id",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "auto", ":id"]
+                }
+              }
+            },
+            {
+              "name": "Create Auto",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/auto",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "auto"]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"make\": \"Toyota\",\n    \"model\": \"Camry\",\n    \"year\": 2023\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Boat",
+          "description": "Endpoints for managing boat-specific vehicle information",
+          "item": [
+            {
+              "name": "Get Boat",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/boat/:id",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "boat", ":id"]
+                }
+              }
+            },
+            {
+              "name": "Create Boat",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/boat",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "boat"]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"make\": \"Sea Ray\",\n    \"model\": \"Sundancer\",\n    \"year\": 2023,\n    \"withTrailer\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            }
+          ]
         }
       ]
     },
     {
       "name": "Transaction",
+      "description": "Endpoints for managing payment transactions related to transportation services",
       "item": [
         {
           "name": "Get Transaction",

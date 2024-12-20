@@ -27,17 +27,19 @@ func (s *UserService) GetById(id string) (model.User, error) {
 	return user, err
 }
 
-func (s *UserService) Create(username, password string) (*model.LoginReg, error) {
+func (s *UserService) Create(username, email, password string) (*model.LoginReg, error) {
 	rows, err := s.db.Queryx(
 		`INSERT INTO users (
 			username,
 			password,
+			email,
 			created_at,
 			updated_at
-		) VALUES ($1, $2, NOW(), NULL)
+		) VALUES ($1, $2, $3, NOW(), NULL)
 		RETURNING *`,
 		username,
 		password,
+		email,
 	)
 	if err != nil {
 		return nil, err
