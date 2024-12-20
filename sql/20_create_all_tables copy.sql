@@ -1,15 +1,16 @@
 -- User table
 CREATE TABLE users (
-    id VARCHAR(255) PRIMARY KEY,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE,
+    id text not null primary key default nanoid(),
     username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE
 );
 
 -- ContactInfo table
 CREATE TABLE contact_info (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
     phone_number VARCHAR(20),
     street_address VARCHAR(255),
     city VARCHAR(100),
@@ -22,7 +23,7 @@ CREATE TABLE contact_info (
 
 -- Driver table
 CREATE TABLE drivers (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
     user_id VARCHAR(255) REFERENCES users(id),
     first_name VARCHAR(100),
     last_name VARCHAR(100),
@@ -32,7 +33,7 @@ CREATE TABLE drivers (
 
 -- Insurance table
 CREATE TABLE insurance (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
     policy_number VARCHAR(50),
     ins_provider VARCHAR(100),
     policy_start_date DATE,
@@ -43,7 +44,7 @@ CREATE TABLE insurance (
 
 -- License table
 CREATE TABLE license (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
     license_number VARCHAR(50),
     license_expire_date DATE,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -52,7 +53,8 @@ CREATE TABLE license (
 
 -- Hauler table
 CREATE TABLE haulers (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
+    driver_id text not null REFERENCES drivers(id),
     make VARCHAR(50),
     model VARCHAR(50),
     year INTEGER,
@@ -64,7 +66,7 @@ CREATE TABLE haulers (
 
 -- Trailer table
 CREATE TABLE trailers (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
     type VARCHAR(50),
     length DOUBLE PRECISION,
     width DOUBLE PRECISION,
@@ -73,9 +75,17 @@ CREATE TABLE trailers (
     updated_at TIMESTAMP WITH TIME ZONE
 );
 
+-- Hauler-Trailer join table
+CREATE TABLE hauler_trailers (
+    hauler_id text REFERENCES haulers(id),
+    trailer_id text REFERENCES trailers(id),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (hauler_id, trailer_id)
+);
+
 -- Offer table
 CREATE TABLE offers (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
     amount DOUBLE PRECISION,
     deadline_date TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -84,7 +94,7 @@ CREATE TABLE offers (
 
 -- Owner table
 CREATE TABLE owners (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
     user_id VARCHAR(255) REFERENCES users(id),
     first_name VARCHAR(100),
     last_name VARCHAR(100),
@@ -94,7 +104,7 @@ CREATE TABLE owners (
 
 -- Transportation table
 CREATE TABLE transportation (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
     description TEXT,
     transport_date TIMESTAMP WITH TIME ZONE,
     pickup_address TEXT,
@@ -109,7 +119,7 @@ CREATE TABLE transportation (
 
 -- Rating table
 CREATE TABLE ratings (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
     past_deliveries TEXT,
     average_rating VARCHAR(50),
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -118,7 +128,7 @@ CREATE TABLE ratings (
 
 -- Transaction table
 CREATE TABLE transactions (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
     payment_method VARCHAR(50),
     amount DOUBLE PRECISION,
     transaction_date TIMESTAMP WITH TIME ZONE,
@@ -128,17 +138,19 @@ CREATE TABLE transactions (
 
 -- Vehicle table
 CREATE TABLE vehicles (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
     length INTEGER,
     width INTEGER,
     height INTEGER,
+    auto_id text REFERENCES autos(id),
+    boat_id text REFERENCES boats(id),
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE
 );
 
 -- Auto table
 CREATE TABLE autos (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
     make VARCHAR(50),
     model VARCHAR(50),
     year INTEGER,
@@ -148,7 +160,7 @@ CREATE TABLE autos (
 
 -- Boat table
 CREATE TABLE boats (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
     make VARCHAR(50),
     model VARCHAR(50),
     year INTEGER,
@@ -159,7 +171,7 @@ CREATE TABLE boats (
 
 -- Conversation table
 CREATE TABLE conversations (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
     sender_id VARCHAR(255),
     recipient_id VARCHAR(255),
     content TEXT,
@@ -168,6 +180,6 @@ CREATE TABLE conversations (
 
 -- Message table
 CREATE TABLE messages (
-    id VARCHAR(255) PRIMARY KEY,
+    id text not null primary key default nanoid(),
     subject VARCHAR(255)
 );

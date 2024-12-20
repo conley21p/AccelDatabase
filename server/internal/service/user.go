@@ -17,7 +17,7 @@ func NewUserService(db *sqlx.DB) *UserService {
 
 func (s *UserService) GetIDByUsername(username string) (model.Login, error) {
 	user := model.Login{}
-	err := s.db.Get(&user, "select id from users where username = $1", username)
+	err := s.db.Get(&user, "select id, password from users where username = $1", username)
 	return user, err
 }
 
@@ -28,12 +28,14 @@ func (s *UserService) GetById(id string) (model.User, error) {
 }
 
 func (s *UserService) Create(username, password string) (*model.LoginReg, error) {
-	println("test")
 	rows, err := s.db.Queryx(
-		`insert into users (username,
-		 password)
-	 	values ($1, $2)
-	 	returning *`,
+		`INSERT INTO users (
+			username,
+			password,
+			created_at,
+			updated_at
+		) VALUES ($1, $2, NOW(), NULL)
+		RETURNING *`,
 		username,
 		password,
 	)
@@ -44,4 +46,13 @@ func (s *UserService) Create(username, password string) (*model.LoginReg, error)
 	rows.Next()
 	err = rows.StructScan(&user)
 	return &user, err
+}
+
+func (s *UserService) UsernameExists(username string) (bool, error) {
+	var count int
+	err := s.db.Get(&count, "SELECT COUNT(*) FROM users WHERE username = $1", username)
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
 }

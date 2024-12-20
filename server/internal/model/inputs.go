@@ -83,8 +83,8 @@ type InsuranceInput struct {
 	DriverId        string     `db:"driver_id" json:"driverId"`
 	PolicyNumber    string     `db:"policy_number" json:"policyNumber"`
 	InsProvider     string     `db:"ins_provider" json:"insProvider"`
-	PolicyStartDate time.Time  `db:"policy_start_date" json:"policyStartDate"`
-	PolicyEndDate   time.Time  `db:"policy_end_date" json:"policyEndDate"`
+	PolicyStartDate string     `db:"policy_start_date" json:"policyStartDate"`
+	PolicyEndDate   string     `db:"policy_end_date" json:"policyEndDate"`
 	CreatedAt       time.Time  `db:"created_at" json:"createdAt"`
 	UpdatedAt       *time.Time `db:"updated_at" json:"updatedAt"`
 }
@@ -112,7 +112,7 @@ type HaulerInput struct {
 
 type TrailerInput struct {
 	Id        string     `json:"id"`
-	HaulerId  []string   `json:"haulerId"`
+	HaulerIds []string   `json:"haulerIds"`
 	Type      string     `json:"type"`
 	Length    float64    `json:"length"`
 	Width     float64    `json:"width"`
@@ -146,20 +146,15 @@ type OwnerInput struct {
 
 // Transportation & Transportation structs
 type TransportationInput struct {
-	Id                  string     `json:"id"`
-	Description         string     `json:"description"`
-	TransportDate       time.Time  `db:"transportation_date" json:"transportDate"`
-	PickupAddress       string     `db:"pickup_address" json:"pickupAddress"`
-	DeliveryAddress     string     `db:"delivery_address" json:"deliveryAddress"`
-	DeliverByDate       time.Time  `db:"delivery_by_date" json:"deliverByDate"`
-	PickupByDate        time.Time  `db:"pickup_by_date" json:"pickupByDate"`
-	PickupAvailableDate time.Time  `db:"pickup_by_Avialable_date" json:"pickupAvailableDate"`
-	AcceptedOfferId     string     `db:"accecpted_offer_id" json:"acceptedOfferId"`
-	VehicleId           string     `db:"vechicle_id" json:"vehicleId"`
-	RequestPrice        float64    `db:"request_price" json:"requestPrice"`
-	Offers              []Offer    `json:"participants"`
-	CreatedAt           time.Time  `db:"created_at" json:"createdAt"`
-	UpdatedAt           *time.Time `db:"updated_at" json:"updatedAt"`
+	Description         string  `json:"description" db:"description"`
+	TransportDate       string  `json:"transportDate" db:"transport_date"`
+	PickupAddress       string  `json:"pickupAddress" db:"pickup_address"`
+	DeliveryAddress     string  `json:"deliveryAddress" db:"delivery_address"`
+	DeliverByDate       string  `json:"deliverByDate" db:"deliver_by_date"`
+	PickupByDate        string  `json:"pickupByDate" db:"pickup_by_date"`
+	PickupAvailableDate string  `json:"pickupAvailableDate" db:"pickup_available_date"`
+	RequestPrice        float64 `json:"requestPrice" db:"request_price"`
+	VehicleId           string  `json:"vehicleId" db:"vehicle_id"`
 }
 
 type RatingInput struct {
@@ -233,4 +228,11 @@ type MessageInput struct {
 	Id           string   `json:"id"`
 	Participants []string `json:"participants"`
 	Subject      string   `json:"subject"`
+}
+
+// Add this new struct to inputs.go
+type DriverRegistrationInput struct {
+	Driver    DriverInput     `json:"driver"`
+	Insurance *InsuranceInput `json:"insurance,omitempty"`
+	License   *LicenseInput   `json:"license,omitempty"`
 }

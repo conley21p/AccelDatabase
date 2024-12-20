@@ -10,35 +10,35 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-type ContactInfoController struct {
-	s *service.ContactInfoService
+type LicenseController struct {
+	s *service.LicenseService
 }
 
-func NewContactInfoController(s *service.ContactInfoService) *ContactInfoController {
-	return &ContactInfoController{
+func NewLicenseController(s *service.LicenseService) *LicenseController {
+	return &LicenseController{
 		s: s,
 	}
 }
 
-func (c *ContactInfoController) Get(ctx *fiber.Ctx) error {
+func (c *LicenseController) Get(ctx *fiber.Ctx) error {
 	user := ctx.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	userId := claims["sub"].(string)
 	driverId := ctx.Params("id")
 
-	contactInfo, err := c.s.GetByDriverId(driverId, userId)
+	license, err := c.s.GetByDriverId(driverId, userId)
 	if err != nil {
 		return response.ErrorNotFound(err)
 	}
-	if contactInfo == nil {
-		return response.ErrorNotFound(errors.New("contact info not found"))
+	if license == nil {
+		return response.ErrorNotFound(errors.New("license not found"))
 	}
 	return response.Ok(ctx, fiber.Map{
-		"contactInfo": contactInfo,
+		"license": license,
 	})
 }
 
-func (c *ContactInfoController) Create(ctx *fiber.Ctx) error {
+func (c *LicenseController) Create(ctx *fiber.Ctx) error {
 	user := ctx.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	userId := claims["sub"].(string)
@@ -47,59 +47,59 @@ func (c *ContactInfoController) Create(ctx *fiber.Ctx) error {
 		return response.ErrorUnauthorized(nil, "Unauthorized")
 	}
 
-	input := model.ContactInfoInput{}
+	input := model.LicenseInput{}
 	if err := ctx.BodyParser(&input); err != nil {
 		return response.ErrorBadRequest(err)
 	}
 
 	// Validate required fields
-	if input.PhoneNumber == "" || input.StreetAddress == "" {
-		return response.ErrorBadRequest(errors.New("phone number and street address are required"))
+	if input.LicenseNumber == "" {
+		return response.ErrorBadRequest(errors.New("license number is required"))
 	}
 
-	contactInfo, err := c.s.Create(userId, input)
+	license, err := c.s.Create(userId, input)
 	if err != nil {
 		return response.ErrorBadRequest(err)
 	}
 
 	return response.Created(ctx, fiber.Map{
-		"contactInfo": contactInfo,
+		"license": license,
 	})
 }
 
-func (c *ContactInfoController) Update(ctx *fiber.Ctx) error {
+func (c *LicenseController) Update(ctx *fiber.Ctx) error {
 	user := ctx.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	userId := claims["sub"].(string)
-	contactId := ctx.Params("id")
+	licenseId := ctx.Params("id")
 
-	input := model.ContactInfoInput{}
+	input := model.LicenseInput{}
 	if err := ctx.BodyParser(&input); err != nil {
 		return response.ErrorBadRequest(err)
 	}
 
-	contactInfo, err := c.s.Update(contactId, userId, input)
+	license, err := c.s.Update(licenseId, userId, input)
 	if err != nil {
 		return response.ErrorBadRequest(err)
 	}
 
 	return response.Ok(ctx, fiber.Map{
-		"contactInfo": contactInfo,
+		"license": license,
 	})
 }
 
-func (c *ContactInfoController) Delete(ctx *fiber.Ctx) error {
+func (c *LicenseController) Delete(ctx *fiber.Ctx) error {
 	user := ctx.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	userId := claims["sub"].(string)
-	contactId := ctx.Params("id")
+	licenseId := ctx.Params("id")
 
-	contactInfo, err := c.s.Delete(contactId, userId)
+	license, err := c.s.Delete(licenseId, userId)
 	if err != nil {
 		return response.ErrorBadRequest(err)
 	}
 
 	return response.Ok(ctx, fiber.Map{
-		"contactInfo": contactInfo,
+		"license": license,
 	})
 }

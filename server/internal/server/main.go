@@ -40,14 +40,41 @@ func (s *Server) Start() error {
 	us := service.NewUserService(s.db)
 	ds := service.NewDriverService(s.db)
 	contactService := service.NewContactInfoService(s.db)
+	licenseService := service.NewLicenseService(s.db)
+	trailerService := service.NewTrailerService(s.db)
+	haulerService := service.NewHaulerService(s.db)
+	vehicleService := service.NewVehicleService(s.db)
+	autoService := service.NewAutoService(s.db)
+	boatService := service.NewBoatService(s.db)
+	transactionService := service.NewTransactionService(s.db)
+	transportationService := service.NewTransportationService(s.db)
+	ownerService := service.NewOwnerService(s.db)
 
 	uc := controller.NewAuthController(us, s.jwtSecret)
 	dc := controller.NewDriverController(ds)
 	contactController := controller.NewContactInfoController(contactService)
+	licenseController := controller.NewLicenseController(licenseService)
+	trailerController := controller.NewTrailerController(trailerService)
+	haulerController := controller.NewHaulerController(haulerService)
+	vehicleController := controller.NewVehicleController(vehicleService)
+	autoController := controller.NewAutoController(autoService)
+	boatController := controller.NewBoatController(boatService)
+	transactionController := controller.NewTransactionController(transactionService)
+	transportationController := controller.NewTransportationController(transportationService)
+	ownerController := controller.NewOwnerController(ownerService)
 
 	s.SetupRoutes(uc,
 		dc,
-		contactController)
+		contactController,
+		licenseController,
+		trailerController,
+		haulerController,
+		vehicleController,
+		autoController,
+		boatController,
+		transactionController,
+		transportationController,
+		ownerController)
 
 	return s.app.Listen(s.port)
 }

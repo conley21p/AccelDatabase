@@ -13,6 +13,7 @@ type Login struct {
 type LoginReg struct {
 	Id        string     `json:"id"`
 	Username  string     `json:"username"`
+	Email     string     `json:"email"`
 	Password  string     `json:"-"`
 	DriverId  *string    `db:"driver_id" json:"driverId"`
 	OwnerId   *string    `db:"owner_id" json:"ownerId"`
@@ -21,28 +22,31 @@ type LoginReg struct {
 }
 type UserDriver struct {
 	Id        string     `json:"id"`
-	CreatedAt time.Time  `db:"created_at" json:"createdAt"`
-	UpdatedAt *time.Time `db:"updated_at" json:"updatedAt"`
 	Username  string     `json:"username"`
+	Email     string     `json:"email"`
 	Password  string     `json:"-"`
 	DriverId  string     `db:"driver_id" json:"driverId"`
+	CreatedAt time.Time  `db:"created_at" json:"createdAt"`
+	UpdatedAt *time.Time `db:"updated_at" json:"updatedAt"`
 }
 type UserOwner struct {
 	Id        string     `json:"id"`
-	CreatedAt time.Time  `db:"created_at" json:"createdAt"`
-	UpdatedAt *time.Time `db:"updated_at" json:"updatedAt"`
 	Username  string     `json:"username"`
+	Email     string     `json:"email"`
 	Password  string     `json:"-"`
 	OwnerId   string     `db:"owner_id" json:"ownerId"`
+	CreatedAt time.Time  `db:"created_at" json:"createdAt"`
+	UpdatedAt *time.Time `db:"updated_at" json:"updatedAt"`
 }
 type User struct {
 	Id        string     `json:"id"`
-	CreatedAt time.Time  `db:"created_at" json:"createdAt"`
-	UpdatedAt *time.Time `db:"updated_at" json:"updatedAt"`
 	Username  string     `json:"username"`
+	Email     string     `json:"email"`
 	Password  string     `json:"-"`
 	DriverId  string     `db:"driver_id" json:"driverId"`
 	OwnerId   string     `db:"owner_id" json:"ownerId"`
+	CreatedAt time.Time  `db:"created_at" json:"createdAt"`
+	UpdatedAt *time.Time `db:"updated_at" json:"updatedAt"`
 }
 
 // Account associated Structs
@@ -61,17 +65,17 @@ type ContactInfo struct {
 
 // Driver & Driver Associated Structs
 type Driver struct {
-	Id              string           `json:"id"`
+	Id              string           `json:"id" db:"id"`
 	UserId          string           `db:"user_id" json:"userId"`
 	FirstName       string           `db:"first_name" json:"firstName"`
 	LastName        string           `db:"last_name" json:"lastName"`
-	ContactInfoId   string           `db:"contact_info_id" json:"contactInfoId"`
-	InsuranceId     string           `db:"insurance_id" json:"insuranceId"`
-	LicenseId       string           `db:"license_id" json:"licenseId"`
-	RatingId        string           `db:"rating_id" json:"ratingId"`
-	Haulers         []Hauler         `json:"Haulers"`
-	Offers          []Offer          `json:"Offers"`
-	Transportations []Transportation `json:"Transportations"`
+	ContactInfo     *ContactInfo     `db:"-" json:"contactInfo,omitempty"`
+	Insurance       *Insurance       `db:"-" json:"insurance,omitempty"`
+	License         *License         `db:"-" json:"license,omitempty"`
+	Rating          *Rating          `db:"-" json:"rating,omitempty"`
+	Haulers         []Hauler         `db:"-" json:"haulers,omitempty"`
+	Offers          []Offer          `db:"-" json:"offers,omitempty"`
+	Transportations []Transportation `db:"-" json:"transportations,omitempty"`
 	CreatedAt       time.Time        `db:"created_at" json:"createdAt"`
 	UpdatedAt       *time.Time       `db:"updated_at" json:"updatedAt"`
 }
@@ -96,25 +100,25 @@ type License struct {
 	UpdatedAt         *time.Time `db:"updated_at" json:"updatedAt"`
 }
 type Hauler struct {
-	Id             string     `json:"id"`
+	Id             string     `json:"id" db:"id"`
 	DriverId       string     `db:"driver_id" json:"driverId"`
-	Trailers       []Trailer  `json:"trailers"`
-	Make           string     `json:"make"`
-	Model          string     `json:"model"`
-	Year           int        `json:"year"`
-	Mileage        float64    `json:"mileage"`
-	TowingCapacity float64    `json:"towingCapacity"`
+	Trailers       []Trailer  `json:"trailers" db:"-"`
+	Make           string     `json:"make" db:"make"`
+	Model          string     `json:"model" db:"model"`
+	Year           int        `json:"year" db:"year"`
+	Mileage        float64    `json:"mileage" db:"mileage"`
+	TowingCapacity float64    `db:"towing_capacity" json:"towingCapacity"`
 	CreatedAt      time.Time  `db:"created_at" json:"createdAt"`
 	UpdatedAt      *time.Time `db:"updated_at" json:"updatedAt"`
 }
 
 type Trailer struct {
-	Id        string     `json:"id"`
-	HaulerId  string     `json:"haulerId"`
-	Type      string     `json:"type"`
-	Length    float64    `json:"length"`
-	Width     float64    `json:"width"`
-	Capacity  float64    `json:"capacity"`
+	Id        string     `json:"id" db:"id"`
+	HaulerIds []string   `json:"haulerIds" db:"-"`
+	Type      string     `json:"type" db:"type"`
+	Length    float64    `json:"length" db:"length"`
+	Width     float64    `json:"width" db:"width"`
+	Capacity  float64    `json:"capacity" db:"capacity"`
 	CreatedAt time.Time  `db:"created_at" json:"createdAt"`
 	UpdatedAt *time.Time `db:"updated_at" json:"updatedAt"`
 }
@@ -144,20 +148,21 @@ type Owner struct {
 
 // Transportation & Transportation Structs
 type Transportation struct {
-	Id                  string     `json:"id"`
-	Description         string     `json:"description"`
-	TransportDate       time.Time  `db:"transportation_date" json:"transportDate"`
-	PickupAddress       string     `db:"pickup_address" json:"pickupAddress"`
-	DeliveryAddress     string     `db:"delivery_address" json:"deliveryAddress"`
-	DeliverByDate       time.Time  `db:"delivery_by_date" json:"deliverByDate"`
-	PickupByDate        time.Time  `db:"pickup_by_date" json:"pickupByDate"`
-	PickupAvailableDate time.Time  `db:"pickup_by_Avialable_date" json:"pickupAvailableDate"`
-	AcceptedOfferId     string     `db:"accecpted_offer_id" json:"acceptedOfferId"`
-	VehicleId           string     `db:"vechicle_id" json:"vehicleId"`
-	RequestPrice        float64    `db:"request_price" json:"requestPrice"`
-	Offers              []Offer    `json:"participants"`
-	CreatedAt           time.Time  `db:"created_at" json:"createdAt"`
-	UpdatedAt           *time.Time `db:"updated_at" json:"updatedAt"`
+	Id                  string     `json:"id" db:"id"`
+	DriverId            string     `json:"driverId" db:"driver_id"`
+	Description         string     `json:"description" db:"description"`
+	TransportDate       time.Time  `json:"transportDate" db:"transport_date"`
+	PickupAddress       string     `json:"pickupAddress" db:"pickup_address"`
+	DeliveryAddress     string     `json:"deliveryAddress" db:"delivery_address"`
+	DeliverByDate       time.Time  `json:"deliverByDate" db:"deliver_by_date"`
+	PickupByDate        time.Time  `json:"pickupByDate" db:"pickup_by_date"`
+	PickupAvailableDate time.Time  `json:"pickupAvailableDate" db:"pickup_available_date"`
+	AcceptedOfferId     string     `json:"acceptedOfferId" db:"accepted_offer_id"`
+	VehicleId           string     `json:"vehicleId" db:"vehicle_id"`
+	RequestPrice        float64    `json:"requestPrice" db:"request_price"`
+	Offers              []Offer    `json:"participants" db:"-"`
+	CreatedAt           time.Time  `json:"createdAt" db:"created_at"`
+	UpdatedAt           *time.Time `json:"updatedAt" db:"updated_at"`
 }
 
 type Rating struct {
@@ -184,13 +189,13 @@ type Transaction struct {
 }
 
 type Vehicle struct {
-	Id               string     `json:"id"`
-	TransportationId string     `db:"transportation_id" json:"transportationID"`
-	AutoId           string     `db:"auto_id" json:"autoID"`
-	BoatId           string     `db:"boat_id" json:"boatID"`
-	Length           int        `json:"length"`
-	Width            int        `json:"width"`
-	Height           int        `json:"height"`
+	Id               string     `json:"id" db:"id"`
+	TransportationId string     `json:"transportationId" db:"transportation_id"`
+	Length           int        `json:"length" db:"length"`
+	Width            int        `json:"width" db:"width"`
+	Height           int        `json:"height" db:"height"`
+	AutoId           string     `json:"autoId" db:"auto_id"`
+	BoatId           string     `json:"boatId" db:"boat_id"`
 	CreatedAt        time.Time  `db:"created_at" json:"createdAt"`
 	UpdatedAt        *time.Time `db:"updated_at" json:"updatedAt"`
 }

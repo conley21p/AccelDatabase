@@ -3,6 +3,8 @@ package controller
 import (
 	"time"
 
+	"errors"
+
 	"github.com/conley21p/AccelDatabase/Server/internal/model"
 	"github.com/conley21p/AccelDatabase/Server/internal/server/router/response"
 	"github.com/conley21p/AccelDatabase/Server/internal/service"
@@ -39,10 +41,24 @@ func (c *AuthController) Register(ctx *fiber.Ctx) error {
 	if err := ctx.BodyParser(&input); err != nil {
 		return response.ErrorBadRequest(err)
 	}
+
+	// Check if username already exists
+	exists, err := c.s.UsernameExists(input.Username)
+	if err != nil {
+		return response.ErrorBadRequest(err)
+	}
+	if exists {
+		return response.ErrorBadRequest(errors.New("username already exists"))
+	}
+
+	println("Password: " + input.Password)
 	password, err := util.HashPassword(input.Password)
 	if err != nil {
 		return response.ErrorBadRequest(err)
 	}
+	println("input.username: " + input.Username)
+	println("input.password: " + input.Password)
+	println("password: " + password)
 	user, err := c.s.Create(input.Username, password)
 	if err != nil {
 		return response.ErrorUnauthorized(err, "Registration error")
@@ -63,16 +79,18 @@ func (c *AuthController) Login(ctx *fiber.Ctx) error {
 		return response.ErrorBadRequest(err)
 	}
 	user, err := c.s.GetIDByUsername(input.Username)
+
 	if err != nil {
-		return response.ErrorUnauthorized(err, "Login error")
+		return response.ErrorUnauthorized(err, "Login error 1")
 	}
+
 	if !util.CheckPassword(input.Password, user.Password) {
-		return response.ErrorUnauthorized(err, "Login error")
+		return response.ErrorUnauthorized(err, "Login error 2")
 	}
 	println("Create token ID: " + user.Id)
 	token, err := c.createToken(user.Id)
 	if err != nil {
-		return response.ErrorUnauthorized(err, "Login error")
+		return response.ErrorUnauthorized(err, "Login error 3")
 	}
 	return response.Ok(ctx, fiber.Map{
 		"user":  user,

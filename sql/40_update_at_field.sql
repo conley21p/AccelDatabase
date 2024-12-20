@@ -1,11 +1,3 @@
--- Function to update timestamp
-CREATE OR REPLACE FUNCTION moddatetime(updated_at_column TIMESTAMP WITH TIME ZONE) RETURNS TRIGGER AS $$
-BEGIN
-   NEW.updated_at = now();
-   RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
 -- Users table trigger
 CREATE TRIGGER users_updated_at
   BEFORE UPDATE ON users

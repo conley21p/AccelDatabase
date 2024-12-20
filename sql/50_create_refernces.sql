@@ -30,3 +30,24 @@ ALTER TABLE vehicles ADD COLUMN auto_id VARCHAR(36) REFERENCES autos(id);
 
 -- Add boat_id to vehicles table (assuming one-to-one with boats if it's not null)
 ALTER TABLE vehicles ADD COLUMN boat_id VARCHAR(36) REFERENCES boats(id);
+
+-- Add driver_id to insurance table
+ALTER TABLE insurance ADD COLUMN driver_id text REFERENCES drivers(id);
+
+-- Add driver_id to license table
+ALTER TABLE license ADD COLUMN driver_id text REFERENCES drivers(id);
+
+-- Add driver_id to haulers table
+ALTER TABLE haulers ADD COLUMN driver_id text REFERENCES drivers(id);
+
+-- Add hauler_id to trailers table
+ALTER TABLE trailers ADD COLUMN hauler_id text REFERENCES haulers(id);
+
+-- Add driver_id to transportation table
+ALTER TABLE transportation ADD COLUMN driver_id text REFERENCES drivers(id);
+
+-- Add driver_id to offers table
+ALTER TABLE offers ADD COLUMN driver_id text REFERENCES drivers(id);
+
+-- Add transportation_id to vehicles table
+ALTER TABLE vehicles ADD COLUMN transportation_id text REFERENCES transportation(id);
